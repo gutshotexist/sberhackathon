@@ -2,6 +2,7 @@ import Head from "next/head";
 import NavBar from "../components/NavBar";
 import Hero from "../components/hero";
 import Faqcomponent from "../components/faq";
+import Footer from "../components/footer";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <NavBar />
       <Hero />
       <Faqcomponent />
+      <Footer />
       <Head>
         <title>SP - источник внешних данных на Siberium</title>
         <meta
