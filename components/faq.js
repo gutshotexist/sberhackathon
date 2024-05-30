@@ -41,7 +41,7 @@ const Faqcomponent = () => {
                 </svg>
                 <div className="grow">
                   <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-                    Команда экспертов
+                    Команда профессионалов
                   </h3>
                   <p className="mt-1 text-gray-600 dark:text-neutral-400">
                     SiberiumPythia создана командой профессионалов, имеющих

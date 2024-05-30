@@ -13,7 +13,7 @@ const AboutUs = () => {
               Наша команда
             </h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12 justify-center">
             <div className="text-center">
               <div className="rounded-xl sm:w-48 sm:h-48 lg:w-60 lg:h-60 mx-auto relative">
                 <Image
@@ -49,25 +49,6 @@ const AboutUs = () => {
                 </h3>
                 <p className="text-xs text-gray-600 sm:text-sm lg:text-base dark:text-neutral-400">
                   Бекенд
-                </p>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="rounded-xl sm:w-48 sm:h-48 lg:w-60 lg:h-60 mx-auto relative">
-                <Image
-                  className="rounded-xl"
-                  src="/assets/photo_2023-05-10_03-11-54.jpg"
-                  alt="Image Description"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </div>
-              <div className="mt-2 sm:mt-4">
-                <h3 className="text-sm font-medium text-gray-800 sm:text-base lg:text-lg dark:text-neutral-200">
-                  Третий член команды
-                </h3>
-                <p className="text-xs text-gray-600 sm:text-sm lg:text-base dark:text-neutral-400">
-                  СЕО
                 </p>
               </div>
             </div>
