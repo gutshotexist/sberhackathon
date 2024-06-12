@@ -1,34 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Проект SiberiumPythia — это система оракулов для децентрализованного финансового снабжения данными.
 
-## Getting Started
+_Вдохновленный Chainlink. Создан с нуля._
 
-First, run the development server:
+## Демонстрационный интерфейс
 
-```bash
-npm run dev
-# or
-yarn dev
+https://sberhackathon.vercel.app/
+
+![](images/interface.jpg)
+![](images/chart.jpg)
+
+## Обзор
+
+Схема может быть представлена в виде ASCII-графики:
+
+```
+                       Клиент
+                         |
+                    PriceOracle
+                         |
+     +-------------------+----------------------------+
+     |                   |                            |
+   Символ             Символ                       Символ
+     |                   |                            |
+     |                   |                            |
+   Агрегатор         Агрегатор <== Heartbit      Агрегатор
+     |                   |                            |
+    ...          +-------+-------+                   ...
+                /        |        \
+         Transmitter Transmitter Transmitter
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Описание компонентов
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- Клиент использует, например, getLastPrice из PriceOracle для доступа к последней цене некоторого символа
+- PriceOracle является прокси для вызова Symbols, который хранит соответствующий код символа - адрес Symbol
+- Symbol - контракт, который хранит историю цен определенного символа и позволяет получить доступ к последней цене (основная функция)
+- Aggregator - контракт, который обрабатывает и проверяет входящие цены от Transmitters
+- Heartbit — внешний инструмент (скрипт), который периодически вызывает Aggregator для открытия и закрытия так называемых раундов
+- Transmitter — скрипт, который слушает событие открытия раунда в Aggregator, извлекает цену из поставщика цен и отправляет ее в Aggregator
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### Дополнительная информация
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- Для проверки передатчиков используется подпись ECDSA, которую они прикрепляют к транзакции с ценой
+- Проверяется отклонение цены от предыдущей известной, задержка ответа на уровне метки времени от передатчика и метки времени транзакции ответа
+- Если средняя цена раунда (от всех передатчиков, отправивших цену в Aggregator) не отличается от средней цены предыдущего раунда, то она не сохраняется в Symbol
+- Все смарт-контракты принадлежат владельцу и позволяют горячую замену
 
-## Learn More
+# Установка и использование
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Папка `contracts` содержит проект Hardhat, есть скрипт для развертывания всех смарт-контрактов и даже две задачи `transmitterAdd` и `transmitterDelete` для управления списком разрешенных передатчиков в контрактах Aggregator
+2. Папка `frontend` — это полноценный интерфейс нашего оракула
+3. Папка `heartbit` содержит проект на NodeJS, просто скопируйте его, перейдите в папку и начните использовать команду `node index.js` или используйте PM2 `pm2 start -n heartbit index.js`
+4. Папка `transmitter` содержит проект на NodeJS, направленный на извлечение цен от поставщика цен и отправку их каждый раз, когда `heartbit` запускает новый раунд, просто скопируйте его, перейдите в папку и начните использовать команду `node index.js` или используйте PM2 `pm2 start -n transmitter_symbol index.js`, не забудьте обновить `.env` с правильными значениями (посмотрите `.env.example`)
