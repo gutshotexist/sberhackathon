@@ -3,9 +3,9 @@ import BatchHistoryPrice from "../components/historyprice";
 import NavBar from "../components/NavBar";
 
 const Chart = () => {
-  const symbolCode = 1; // replace with actual symbolCode
-  const roundId = 10; // replace with actual roundId
-  const maxRounds = 10; // replace with actual maxRounds
+  const symbolCode = 1;
+  const roundId = 10;
+  const maxRounds = 10;
 
   return (
     <div className="min-h-screen bg-background">

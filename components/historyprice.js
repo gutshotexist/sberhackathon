@@ -15,21 +15,17 @@ const fetchBatchHistoryPrice = async (symbolCode, roundId, maxRounds) => {
     roundId,
     maxRounds
   );
-  console.log("getBatchHistoryPrice response:", response);
 
   const [prices, total] = response;
   const formattedPrices = prices.map((price) => ({
-    timestamp: new Date(price.timestamp.toNumber() * 1000), // Convert to JS Date object
+    timestamp: new Date(price.timestamp.toNumber() * 1000),
     price: price.price.div(ethers.BigNumber.from(100)),
   }));
 
-  console.log("Formatted Prices:", formattedPrices);
   return formattedPrices;
 };
 
 const createChart = (data, chartElement) => {
-  console.log("Creating chart with data:", data);
-
   const margin = { top: 20, right: 30, bottom: 30, left: 60 };
   const width = chartElement.offsetWidth - margin.left - margin.right;
   const height = 400 - margin.top - margin.bottom;
@@ -67,7 +63,7 @@ const createChart = (data, chartElement) => {
     .append("path")
     .datum(data)
     .attr("fill", "none")
-    .attr("stroke", "#10B981") // green color
+    .attr("stroke", "#10B981")
     .attr("stroke-width", 1.5)
     .attr("d", line);
 
